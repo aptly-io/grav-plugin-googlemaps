@@ -1,0 +1,38 @@
+name: Googlemaps
+version: 0.0.1
+description: The **Googlemaps** plugin provides a method to display a google map and kmz overlay.
+icon: caret-square-o-right
+author:
+  name: Francis Meyvis
+  email: https://aptly.io/contact
+  url: http://aptly.io
+homepage: https://github.com/aptly-io/grav-plugin-googlemaps
+demo: http://aptly.io/about/hiking
+keywords: Google maps, kmz
+bugs: https://aptly.io/contact
+license: MIT
+
+form:
+  validation: strict
+  fields:
+    enabled:
+      type: toggle
+      label: Plugin activation
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
+
+    built_in_css:
+      type: toggle
+      label: Use built in CSS
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool

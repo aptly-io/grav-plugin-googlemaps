@@ -1,0 +1,15 @@
+{
+  "project":"grav-plugin-googlemaps",
+  "platforms":{
+    "grav":{
+      "nodes":{
+        "plugin":[
+          {
+            "source":"/",
+            "destination":"/user/plugins/googlemaps"
+          }
+        ]
+      }
+    }
+  }
+}

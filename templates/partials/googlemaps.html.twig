@@ -1,0 +1,11 @@
+{# Render a googlemaps object#}
+<div>
+    <div id="{{googlemaps.tagid}}" class="googlemaps"></div>
+    <div id="{{googlemaps.tagid}}Status"></div>
+</div>
+
+<script>
+    google.maps.event.addDomListener(window, "load", function() {
+        initGoogleMaps("{{googlemaps.tagid}}");
+    });
+</script>
