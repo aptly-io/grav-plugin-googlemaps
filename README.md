@@ -12,7 +12,7 @@ The `<tagid>` distinguishes different googlemap objects in a single HTML page fr
 It links a `<tagid>.kmz` file, with a `<div id="<tagid>">` and its corresponding javascript.
 See how this might look:
 
-![Screenshot Google map Plugin](assets/screenshot.png "Google map preview screenshot")
+![Screenshot Google map Plugin](assets/screendump.png "Google map preview screenshot")
 
 
 ## Installation and Updates
