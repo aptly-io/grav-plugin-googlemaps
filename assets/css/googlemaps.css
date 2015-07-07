@@ -1,4 +1,7 @@
+/* Copyright 2015 Francis Meyvis */
+
 .googlemaps {
     height:250px;
     width:300px;
+    background-color: #1BB3E9;    /* antimatter core-accent background while loading the map*/
 }

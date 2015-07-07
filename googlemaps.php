@@ -1,14 +1,17 @@
 <?php
 
+/* Copyright 2015 Francis Meyvis*/
+
 /*
- * Google maps v0.0.1
+ * Google maps v0.0.2
  *
- * This plugin inserts a google map into the resulting HTML document
+ * This plugin inserts a google map(s) object into the resulting HTML document
+ * using Google's google map API service.
  *
  * Licensed under MIT, see LICENSE.
  *
- * @package     GoogleMaps
- * @version     0.0.1
+ * @package     Googlemaps
+ * @version     0.0.2
  * @link        <https://github.com/aptly-io/grav-plugin-googlemaps>
  * @author      Francis Meyvis <https://aptly.io/contact>
  * @copyright   2015, Francis Meyvis
@@ -37,11 +40,13 @@ class GooglemapsPlugin extends Plugin {
     public function onPluginsInitialized() {
         $this->log('GooglemapsPlugin.onPluginsInitialized');
 
-        /* Found this undocumented & obscure snippet in many plug-ins. Backdoor?*/
-        //if ($this->isAdmin()) {
-        //    $this->active = false;
-        //    return;
-        //}
+        /* Found this undocumented & obscure snippet in many plug-ins.
+         * According to Sommerregen this checks if the admin user is active
+         * If so, this plug-in disables itself.
+        if ($this->isAdmin()) {
+            $this->active = false;
+            return;
+        }*/
 
         if ($this->config->get('plugins.googlemaps.enabled')) {
             // if the plugin is activated, then subscribe to these additional events
@@ -62,7 +67,7 @@ class GooglemapsPlugin extends Plugin {
     }
 
 
-    /** Replace place markers [GOOGLEMAPS:<tagid>] with elements to render a google maps*/
+    /** Replace place markers [GOOGLEMAPS:<tagid>] with the googlemaps.html.twig to render a google maps*/
     public function onPageContentProcessed(Event $event) {
         $this->log('GooglemapsPlugin.onPageContentProcessed');
 
@@ -73,7 +78,7 @@ class GooglemapsPlugin extends Plugin {
             // get current rendered content
             $content = $page->getRawContent();
             // replace marker(s) with Google map object(s)
-            $page->setRawContent($this->process($content));
+            $page->setRawContent($this->process($content, $config));
         }
     }
 
@@ -83,16 +88,14 @@ class GooglemapsPlugin extends Plugin {
         $this->log('GooglemapsPlugin.onTwigSiteVariables');
 
         $assets = $this->grav['assets'];
-        if ($this->config->get('plugins.googlemaps.built_in_css')) {
-            $assets->addCss('plugin://googlemaps/assets/css/googlemaps.css');
-        }
+        $assets->addCss('plugin://googlemaps/assets/css/googlemaps.css');
         $assets->addJs('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false');
         $assets->addJs('plugin://googlemaps/assets/js/googlemaps.js');
     }
 
 
-    /** Replace handler*/
-    private function process($content) {
+    /** Replace each marker, markers are found through a regex.*/
+    private function process($content, $config) {
         $this->log('GooglemapsPlugin.process');
 
         $replacements = [];
@@ -109,19 +112,58 @@ class GooglemapsPlugin extends Plugin {
         $regex = '~(<p>)?\s*\[(GOOGLEMAPS)\:(?P<tagid>[^\:\]]*)\]\s*(?(1)</p>)~i';
 
         if (preg_match_all($regex, $content, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
-            $this->log('preg_match_all() = true');
             foreach ($matches as $match) {
 
-                $this->log(serialize($match));
-
                 $tagid = strtolower($match['tagid'][0]);
-                $this->log("tagid: " . $tagid);
+                $this->log("TAGID: " . $tagid);
 
-                // Render googlemaps through the twig
+                // mandatory options for creating a google map object
+                $mapOptions = [
+                    // default center: oudegem :-)
+                    'center'    => $config->value($tagid . ".center", "51.010009, 4.061270"),
+                    'zoom'      => $config->value($tagid . ".zoom",   12),
+                    'type'      => $config->value($tagid . ".type",   "ROADMAP")
+                ];
+
+                // options for populating the map with KML, markers, info windows etc.
+
+                $displayOptions = [
+                    'kmlStatus' => $config->value($tagid . ".kmlStatus", "false")
+                ];
+
+                if ($config->get($tagid . ".kmlUrl")) {
+                    $displayOptions['kmlUrl'] = $config->get($tagid . ".kmlUrl");
+                }
+
+                $markers = [];
+                if ($config->get($tagid . ".markers")) {
+                    foreach ($config->value($tagid . ".markers") as $marker) {
+                        $fields = [
+                            'location', // the marker's location
+                            'title',    // the marker's title appearing when hovering over
+                            'snippet',  // the marker's additional info when hovering over (not working as advertised Google!?!)
+                            'zIndex',   // the marker's order among other markers
+                            'timeout',  // the marker's dropdown timeout
+                            'info',     // the info for the infowindow when clicking the marker
+                            'icon',     // the picture URL for replacing the standard marker's look
+                            'link'      // the target when clicking the marker
+                        ];
+                        $tmp = [];
+                        foreach ($fields as $field) {
+                            if (isset($marker[$field])) {
+                                $tmp[$field] = $marker[$field];
+                            }
+                        }
+                        $markers[] = $tmp;
+                    }
+                }
+                $displayOptions['markers'] = $markers;
 
                 $vars['googlemaps'] = [
-                    'tagid' => $tagid
-                ];                  // setup twig variables
+                    'tagid'          => $tagid,          // identifies each googlemap object
+                    'mapOptions'     => $mapOptions,
+                    'displayOptions' => $displayOptions
+                ];
 
                 $twig = $this->grav['twig'];
                 $googlemaps = $twig->processTemplate('partials/googlemaps' . TEMPLATE_EXT, $vars);
@@ -130,6 +172,7 @@ class GooglemapsPlugin extends Plugin {
                 $replacements[] = $googlemaps;
             }
 
+            // all markers found, now replaces these with HTML and JS
             $content = preg_replace_callback(
                 $regex,
                 function($match) use ($replacements) {
@@ -142,8 +185,12 @@ class GooglemapsPlugin extends Plugin {
     }
 
 
+    /** Extra logging while developing the plugin*/
     private function log($msg) {
+        // enable while developing
         //$this->grav['debugger']->addMessage($msg);
+
+        // I don't get this to work without exceptions being thrown at me :-(
         //$this->grav['logger']->info($msg);
     }
 }

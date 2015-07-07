@@ -5,6 +5,8 @@ username: aptlnwzz
 path: public_html/user/plugins/googlemaps
 exclude:
   - assets/screendump.png
+  - assets/screendump_annotated.odg
+  - assets/screendump_annotated.png
   - CHANGELOG.md
   - dandelion.yaml
   - .git/
