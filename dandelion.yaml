@@ -1,0 +1,14 @@
+adapter: sftp
+host: ftp.aptly.io
+port: 21098
+username: aptlnwzz
+path: public_html/user/plugins/googlemaps
+exclude:
+  - assets/screendump.png
+  - CHANGELOG.md
+  - dandelion.yaml
+  - .git/
+  - .gitignore
+  - hebe.json
+  - LICENSE
+  - README.md
