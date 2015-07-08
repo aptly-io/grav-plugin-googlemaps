@@ -17,7 +17,7 @@ With each `<tagid>` come [Grav page header]() settings to customize the googlema
 See this screen dump how this might look:
 
 <a name="screendump">
-![Screen dump Google map Plugin](assets/assets/screendump_annotated.png "Google map preview screenshot")
+![Screen dump Google map Plugin](assets/screendump_annotated.png "Google map preview screenshot")
 (it's taken from my [website](https://aptly.io/about/hiking))
 </a>
 
