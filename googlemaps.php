@@ -2,16 +2,18 @@
 
 /* Copyright 2015 Francis Meyvis*/
 
-/*
- * Google maps v0.0.2
+/**
+ * Googlemaps a Grav plugin
  *
- * This plugin inserts a google map(s) object into the resulting HTML document
+ * This plugin inserts a googlemaps object(s) into the resulting HTML document
  * using Google's google map API service.
+ *
+ * Borrows logic/inspiration from the Grav Toc plugin.
  *
  * Licensed under MIT, see LICENSE.
  *
  * @package     Googlemaps
- * @version     0.0.2
+ * @version     0.2.1
  * @link        <https://github.com/aptly-io/grav-plugin-googlemaps>
  * @author      Francis Meyvis <https://aptly.io/contact>
  * @copyright   2015, Francis Meyvis
@@ -25,10 +27,12 @@ use Grav\Common\Plugin;
 use Grav\Common\Page\Page;
 use RocketTheme\Toolbox\Event\Event;
 
-class GooglemapsPlugin extends Plugin {
+class GooglemapsPlugin extends Plugin
+{
 
     /** Return a list of subscribed events*/
-    public static function getSubscribedEvents() {
+    public static function getSubscribedEvents()
+    {
         return [
             // onPluginsInitialized event
             'onPluginsInitialized' => ['onPluginsInitialized', 0]
@@ -37,40 +41,39 @@ class GooglemapsPlugin extends Plugin {
 
 
     /** Initialize the plug-in*/
-    public function onPluginsInitialized() {
-        $this->log('GooglemapsPlugin.onPluginsInitialized');
-
-        /* Found this undocumented & obscure snippet in many plug-ins.
-         * According to Sommerregen this checks if the admin user is active
+    public function onPluginsInitialized()
+    {
+        /* Sommerregen explains this checks if the admin user is active.
          * If so, this plug-in disables itself.
+         * rhukster mentions this is for speedup purposes related to the admin plugin
+         */
         if ($this->isAdmin()) {
             $this->active = false;
-            return;
-        }*/
 
-        if ($this->config->get('plugins.googlemaps.enabled')) {
-            // if the plugin is activated, then subscribe to these additional events
-            $this->enable([
-                'onTwigTemplatePaths'    => ['onTwigTemplatePaths',    0],
-                'onPageContentProcessed' => ['onPageContentProcessed', 0],
-                'onTwigSiteVariables'    => ['onTwigSiteVariables',    0],
-            ]);
+        } else {
+
+            if ($this->config->get('plugins.googlemaps.enabled')) {
+                // if the plugin is activated, then subscribe to these additional events
+                $this->enable([
+                    'onTwigTemplatePaths'    => ['onTwigTemplatePaths',    0],
+                    'onPageContentProcessed' => ['onPageContentProcessed', 0],
+                    'onTwigSiteVariables'    => ['onTwigSiteVariables',    0],
+                ]);
+            }
         }
     }
 
 
     /** Register the enabled plugin's template PATH*/
-    public function onTwigTemplatePaths() {
-        $this->log('GooglemapsPlugin.onTwigTemplatePaths');
-
+    public function onTwigTemplatePaths()
+    {
         $this->grav['twig']->twig_paths[] = __DIR__ . '/templates';
     }
 
 
     /** Replace place markers [GOOGLEMAPS:<tagid>] with the googlemaps.html.twig to render a google maps*/
-    public function onPageContentProcessed(Event $event) {
-        $this->log('GooglemapsPlugin.onPageContentProcessed');
-
+    public function onPageContentProcessed(Event $event)
+    {
         $page = $event['page'];
         $config = $this->mergeConfig($page);
 
@@ -84,9 +87,8 @@ class GooglemapsPlugin extends Plugin {
 
 
     /** Setup the necessary assets*/
-    public function onTwigSiteVariables() {
-        $this->log('GooglemapsPlugin.onTwigSiteVariables');
-
+    public function onTwigSiteVariables()
+    {
         $assets = $this->grav['assets'];
         $assets->addCss('plugin://googlemaps/assets/css/googlemaps.css');
         $assets->addJs('https://maps.googleapis.com/maps/api/js?v=3.exp&sensor=false');
@@ -95,9 +97,8 @@ class GooglemapsPlugin extends Plugin {
 
 
     /** Replace each marker, markers are found through a regex.*/
-    private function process($content, $config) {
-        $this->log('GooglemapsPlugin.process');
-
+    private function process($content, $config)
+    {
         $replacements = [];
 
         // Find all occurrences of GOOGLEMAP in content
@@ -115,14 +116,13 @@ class GooglemapsPlugin extends Plugin {
             foreach ($matches as $match) {
 
                 $tagid = strtolower($match['tagid'][0]);
-                $this->log("TAGID: " . $tagid);
 
                 // mandatory options for creating a google map object
                 $mapOptions = [
                     // default center: oudegem :-)
                     'center'    => $config->value($tagid . ".center", "51.010009, 4.061270"),
                     'zoom'      => $config->value($tagid . ".zoom",   12),
-                    'type'      => $config->value($tagid . ".type",   "ROADMAP")
+                    'mapTypeId' => "google.maps.MapTypeId." . $config->value($tagid . ".type", "ROADMAP")
                 ];
 
                 // options for populating the map with KML, markers, info windows etc.
@@ -175,22 +175,13 @@ class GooglemapsPlugin extends Plugin {
             // all markers found, now replaces these with HTML and JS
             $content = preg_replace_callback(
                 $regex,
-                function($match) use ($replacements) {
+                function($match) use ($replacements)
+                {
                     static $i = 0;
                     return $replacements[$i++];
                 },
                 $content);
         }
         return $content;
-    }
-
-
-    /** Extra logging while developing the plugin*/
-    private function log($msg) {
-        // enable while developing
-        //$this->grav['debugger']->addMessage($msg);
-
-        // I don't get this to work without exceptions being thrown at me :-(
-        //$this->grav['logger']->info($msg);
     }
 }

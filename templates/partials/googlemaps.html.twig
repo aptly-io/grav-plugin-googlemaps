@@ -19,6 +19,9 @@
     var mapOptions{{googlemaps.tagid}} = {{googlemaps.mapOptions|json_encode|raw}};
     var displayOptions{{googlemaps.tagid}} = {{googlemaps.displayOptions|json_encode|raw}};
 
+    {# the map's type is a JS string constant: needs separate handling #}
+    mapOptions{{googlemaps.tagid}}.mapTypeId = {{googlemaps.mapOptions.mapTypeId}};
+
     {# initialize the map, markers and KML (if present) #}
     google.maps.event.addDomListener(window, "load", function() {
         initGoogleMaps(

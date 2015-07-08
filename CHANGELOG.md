@@ -1,12 +1,11 @@
-# v0.0.2
+# v0.2.1
 ## 08/07/2015
 
-2. [](#ExtraFunctionality)
+3. [](#bugfix)
+    * Changes according release guidelines
+    * timeout and type fix
+2. [](#new)
     * Add extra functionality for KML and markers.
     * Clean-up the code and update the documentation.
-
-# v0.0.1
-## 04/07/2015
-
 1. [](#new)
     * Initial release

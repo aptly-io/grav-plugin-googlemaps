@@ -113,8 +113,9 @@ function setMarker(map, markerData) {
     if (markerData.hasOwnProperty("timeout")) {
         // drop down the marker after a small delay
         // this gives nice effect when multiple markers drop at different moments
-        window.setTimeout(function() {
-            marker.setMap(map);
-        }, parseInt(markerData.timeout));
+        timeout = parseInt(markerData.timeout);
     }
+    window.setTimeout(function() {
+        marker.setMap(map);
+    }, timeout);
 }
