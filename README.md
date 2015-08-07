@@ -5,7 +5,7 @@ This plugin generates HTML Google map object(s) based on specific markers in the
 ## About
 
 `googlemaps` is a plugin for [**Grav**](http://getgrav.org).
-This readme describes version 0.2.1.
+This readme describes version 0.2.2.
 The plugin recognizes special marker(s) in a Markdown document.
 It replaces these with HTML Google map objects(s).
 It borrows logic and inspiration from the

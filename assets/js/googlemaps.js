@@ -2,6 +2,8 @@
 
 /** Part of the Grav googlemaps plugin*/
 
+var gm_maps = []; // Holds each google map object with their center and zoom
+
 function initGoogleMaps(tagId, mapOptions, displayOptions) {
 
     // convert the formatted JS string to google.maps.LatLng JS object
@@ -44,14 +46,33 @@ function initGoogleMaps(tagId, mapOptions, displayOptions) {
             setMarker(map, displayOptions.markers[markerIdx]);
         }
     }
+
+    // remember the object for use in gm_updateMaps() at any time later
+    gm_maps.push({ 'map': map, 'center': map.getCenter(), 'zoom': map.getZoom()});
 }
+
+
+/**
+ * Update the displaying of a Google Map object
+ *
+ * When a hidden google.maps.Map object becomes visible, it needs a refresh.
+ * This function is called as a hack from the SectionWidget plugin
+ * As it's unknown which map to update, do all of them!
+ */
+function gm_updateMaps() {
+    for(i = 0; i < gm_maps.length; i++) {
+        google.maps.event.trigger(gm_maps[i].map, 'resize');
+        gm_maps[i].map.setCenter(gm_maps[i].center);
+        gm_maps[i].map.setZoom(gm_maps[i].zoom);
+    }
+}
+
 
 /*
  * Inspiration taken from:
  * - http://gmap-tutorial-101.appspot.com/mapsapi101/2
  * - https://developers.google.com/maps/documentation/javascript/examples/marker-animations-iteration
  */
-
 function setMarker(map, markerData) {
     var values = markerData.location.split(",");
     var markerOptions = {
