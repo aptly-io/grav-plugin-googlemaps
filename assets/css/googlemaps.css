@@ -1,7 +1,15 @@
-/* Copyright 2015 Francis Meyvis */
+/* Copyright 2015, 2016 Francis Meyvis */
+
+.googlemaps_container {
+  position: relative;
+  width: 60%;
+  padding-bottom: 50%;    
+}
 
 .googlemaps {
-    height:250px;
-    width:300px;
-    background-color: #1BB3E9;    /* antimatter core-accent background while loading the map*/
+  position: absolute;
+  width: 100%;
+  height: 100%;
+
+  background-color: #1BB3E9;   /*antimatter core-accent background while loading the map*/
 }

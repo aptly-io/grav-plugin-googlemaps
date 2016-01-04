@@ -1,4 +1,4 @@
-/* Copyright 2015 Francis Meyvis */
+/* Copyright 2015, 2016 Francis Meyvis */
 
 /** Part of the Grav googlemaps plugin*/
 
@@ -46,6 +46,13 @@ function initGoogleMaps(tagId, mapOptions, displayOptions) {
             setMarker(map, displayOptions.markers[markerIdx]);
         }
     }
+
+    // Make sure to re-center correctly when resizing
+    google.maps.event.addDomListener(window, "resize", function() {
+        var center = map.getCenter();
+        google.maps.event.trigger(map, "resize");
+        map.setCenter(center); 
+    });
 
     // remember the object for use in gm_updateMaps() at any time later
     gm_maps.push({ 'map': map, 'center': map.getCenter(), 'zoom': map.getZoom()});

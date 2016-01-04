@@ -5,7 +5,7 @@ This plugin generates HTML Google map object(s) based on specific markers in the
 ## About
 
 `googlemaps` is a plugin for [**Grav**](http://getgrav.org).
-This readme describes version 0.2.2.
+This readme describes version 0.2.3.
 The plugin recognizes special marker(s) in a Markdown document.
 It replaces these with HTML Google map objects(s).
 It borrows logic and inspiration from the
@@ -28,12 +28,34 @@ See this screen dump how this might look:
 
 Please open a new [issue][issues]
 
+### Known issues
+
+>>> TODO: there might be a workaround
+
+- Grav's modular pages have a limitation related to assets on modular
+sub-pages (see [#562](https://github.com/getgrav/grav/issues/562)).
+When placing a googlemap on sub modular page, as a workaround,
+add this header on the main modular page:
+```yaml
+cache_enable: false       # makes sure
+googlemaps:
+    force_modular_assets: true
+```
+Then Page.php needs the fix explained in 
+[#564](https://github.com/getgrav/grav/issues/564)
+
 
 ## Installation and Updates
 
-There's a manual install and update method by downloading
+The googlemaps plugin implementation can be installed in 3 ways:
+
+1. There's a manual install and update method by downloading
 [this plugin](https://github.com/aptly-io/grav-plugin-googlemaps)
-and extracting all plugin files to `</your/site>/grav/user/plugins/googlemaps`.
+and extracting all the plugin's files in `</your/site>/grav/user/plugins/googlemaps`.
+
+2. Use the `bin/gpm install googlemaps`
+
+3. Use the admin plugin as a user with admin rights.
 
 
 ## Usage
@@ -48,6 +70,8 @@ Each googlemaps object corresponds with a unique `<tagid>` to render correctly.
 Special attention for modular pages, as these are joined into one single page,
 make sure these `<tagid>` are all different as well.
 
+The map's width is 60% of the window (and the height is proportional to this width)
+(see the asset `googlemaps.css`). 
 
 ### Operation of the plugin
 
@@ -68,6 +92,7 @@ instantiate the googlemaps object inside the foreseen `<div>` with matching conf
 # Global plugin configurations
 
 enabled: true                # Set to activate this plugin
+built_in_css: true           # Use the plugin's asset `googlemaps.css`
 ```
 
 If you need to change any value,
@@ -149,7 +174,7 @@ googlemaps:
 
 ## License
 
-Copyright 2015 Francis Meyvis.
+Copyright 2015, 2016 Francis Meyvis.
 
 [Licensed](LICENSE) for use under the terms of the [MIT license][mit-license].
 

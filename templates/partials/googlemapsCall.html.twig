@@ -1,0 +1,9 @@
+{# Copyright 2016 Francis Meyvis #}
+{# the map's type is a JS string constant: needs separate handling #}
+mapOptions{{googlemaps.tagid}}.mapTypeId = {{googlemaps.mapOptions.mapTypeId}};
+{# initialize the map, markers and KML (if present) with Google's API#}
+google.maps.event.addDomListener(window, "load", function() {
+    initGoogleMaps("{{googlemaps.tagid}}", 
+                   mapOptions{{googlemaps.tagid}},
+                   displayOptions{{googlemaps.tagid}});
+});
