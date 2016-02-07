@@ -5,5 +5,6 @@ mapOptions{{googlemaps.tagid}}.mapTypeId = {{googlemaps.mapOptions.mapTypeId}};
 google.maps.event.addDomListener(window, "load", function() {
     initGoogleMaps("{{googlemaps.tagid}}", 
                    mapOptions{{googlemaps.tagid}},
-                   displayOptions{{googlemaps.tagid}});
+                   displayOptions{{googlemaps.tagid}},
+                   controlStyle{{googlemaps.tagid}});
 });

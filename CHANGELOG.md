@@ -1,3 +1,14 @@
+# v0.2.3
+## 08/02/2016
+
+1. [](#bugfix)
+    * https://github.com/aptly-io/grav-plugin-googlemaps/issues/1
+1. [](#improved)
+    * Smarter css style sheet
+    * Smart/more efficient asset generation
+    * Support additional Google map settings
+
+
 # v0.2.2
 ## 07/08/2015
 

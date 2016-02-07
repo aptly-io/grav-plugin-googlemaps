@@ -8,8 +8,6 @@ This plugin generates HTML Google map object(s) based on specific markers in the
 This readme describes version 0.2.3.
 The plugin recognizes special marker(s) in a Markdown document.
 It replaces these with HTML Google map objects(s).
-It borrows logic and inspiration from the
-[Grav Toc plugin](https://github.com/sommerregen/grav-plugin-toc)
 The Google map object is generated through
 [Google's Google maps API](https://developers.google.com/maps/documentation/javascript/tutorial).
 
@@ -30,20 +28,30 @@ Please open a new [issue][issues]
 
 ### Known issues
 
->>> TODO: there might be a workaround
-
-- Grav's modular pages have a limitation related to assets on modular
-sub-pages (see [#562](https://github.com/getgrav/grav/issues/562)).
+- Grav's modular sub-pages have a limitation related to header assets for
+the modular sub-page (see [#562](https://github.com/getgrav/grav/issues/562)).
 When placing a googlemap on sub modular page, as a workaround,
-add this header on the main modular page:
-```yaml
-cache_enable: false       # makes sure
-googlemaps:
-    force_modular_assets: true
-```
-Then Page.php needs the fix explained in 
-[#564](https://github.com/getgrav/grav/issues/564)
+add the css directly into the sub-page and prevent loading the css asset:
 
+```yaml
+googlemaps:
+    built_in_css: false
+```
+
+```css
+<style type="text/css">
+.googlemaps_container {
+  position: relative;
+  width: 100%;
+  padding-bottom: 50%;    
+}
+.googlemaps {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+</style>
+```
 
 ## Installation and Updates
 
@@ -67,11 +75,12 @@ to further customize the Google map with:
 * [KML data layer](https://developers.google.com/maps/tutorials/kml/)
 
 Each googlemaps object corresponds with a unique `<tagid>` to render correctly.
-Special attention for modular pages, as these are joined into one single page,
+For modular sub-pages, as these are joined into one single page,
 make sure these `<tagid>` are all different as well.
 
 The map's width is 60% of the window (and the height is proportional to this width)
 (see the asset `googlemaps.css`). 
+
 
 ### Operation of the plugin
 
@@ -152,7 +161,7 @@ googlemaps:
 #### Explanation
 
 * `center` defines the map's latitude/longitude center
-* `zoom` is the map's size or zooming factor
+* `zoom` sets the map's zooming (scale) factor
 * `type` holds the map's type. Possible values are `TERRAIN`, `ROADMAP`, `HYBRID` and `SATELLITE`
 * `kmlUrl` points to KML data. It's rendered over the map.
   Here the KML is exported (as KMZ; a compressed KML format) from the
@@ -170,7 +179,24 @@ googlemaps:
   * `icon` points to a custom marker image.
   * `link` holds the URL that's triggered when clicking the marker. It's mutual exclusive with the `info` option.
     Put page local references in quotes to avoid that the # is taken as a YAML comment.
-
+ * `apiKey`: if using a Google API key
+ * `backgroundColor`: for a background colour (match this with your web-site's background colour)
+ * `disableDefaultUI`: false disables the default UI controls
+ * `disableDoubleClickZoom`: false disables zoom/center on double click
+ * `draggable`: false disables dragging the map (associated customization options draggableCursor and draggingCursor are not supported)
+ * `draggableCursor`: the name or url of the cursor to display when mousing over a draggable map
+ * `draggingCursor`: the name or url of the cursor to display when the map is being dragged
+ * `keyboardShortcuts`: false prevents map control from the keyboard, enabled by default
+ * `mapTypeControl`: false disables the Map type control
+ * `mapTypeControlOptions`: map type look and feel e.g. `{style: 2, position: 11}` for `DROPDOWN_MENU` at bottom center
+ * `maxZoom`: maximal zooming
+ * `minZoom`: mininmal zooming
+ * `scrollwheel`: false prevents zooming by scrollwheel 
+ * `streetViewControl`: false disables the street view peg man (avoid for maps without street road overlay)
+ * `streetViewControlOptions`: the streetview look and feel e.g. `{ position: 11}`
+ * `zoomControl`: false disables the zoom control
+ * `zoomControlOptions`: the zoom control look and feel e.g. `{ position: 11}`
+ * `controlStyle`: set to `azteca` to enable the _retro_ Google maps control look.
 
 ## License
 

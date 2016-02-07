@@ -4,7 +4,10 @@
 
 var gm_maps = []; // Holds each google map object with their center and zoom
 
-function initGoogleMaps(tagId, mapOptions, displayOptions) {
+function initGoogleMaps(tagId, mapOptions, displayOptions, controlStyle) {
+
+    // for the old style googlemap version <3.22, set controlStyle to the string azteca
+    google.maps.controlStyle = controlStyle;
 
     // convert the formatted JS string to google.maps.LatLng JS object
     var values = mapOptions.center.split(",");
