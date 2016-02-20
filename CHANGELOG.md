@@ -1,3 +1,12 @@
+# v0.3.0
+## 20/02/2016
+
+1. [](#improved)
+    * Updated the readme.md
+    * Using typescript (and namespace to avoid cluttering the JS globals)
+    * Smart `enabled: false` per page yaml configuration (emptying the cache and discarding markers)
+
+
 # v0.2.3
 ## 08/02/2016
 

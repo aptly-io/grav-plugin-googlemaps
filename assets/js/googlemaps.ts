@@ -1,6 +1,6 @@
 /* Copyright 2015, 2016 Francis Meyvis */
 
-/** Part of the Grav googlemaps plugin*/
+/** Client part of the Grav googlemaps plugin*/
 
 
 /// <reference path="typings/googlemaps/google.maps.d.ts" />
