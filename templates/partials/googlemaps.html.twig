@@ -4,13 +4,7 @@
     {# actual google map #}
     <div id="{{googlemaps.tagid}}" class="googlemaps" ></div>
     {# the information when clicking on a KML marker #}
-    <div id="{{googlemaps.tagid}}KmlInfo" ></div>
+    <div id="{{googlemaps.tagid}}_KmlInfo" ></div>
     {# the KML status (by default disabled) #}
-    <div id="{{googlemaps.tagid}}KmlStatus" ></div>
-    <script>
-        {# these JS variables become globals: making these unique by their tagid #}
-        var mapOptions{{googlemaps.tagid}}     = {{googlemaps.mapOptions|json_encode|raw}};
-        var displayOptions{{googlemaps.tagid}} = {{googlemaps.displayOptions|json_encode|raw}};
-        var controlStyle{{googlemaps.tagid}}   = {{googlemaps.controlStyle|json_encode|raw}};
-    </script>
+    <div id="{{googlemaps.tagid}}_KmlStatus" ></div>
 </div>

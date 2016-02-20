@@ -1,10 +1,25 @@
 {# Copyright 2016 Francis Meyvis #}
-{# the map's type is a JS string constant: needs separate handling #}
-mapOptions{{googlemaps.tagid}}.mapTypeId = {{googlemaps.mapOptions.mapTypeId}};
-{# initialize the map, markers and KML (if present) with Google's API#}
-google.maps.event.addDomListener(window, "load", function() {
-    initGoogleMaps("{{googlemaps.tagid}}", 
-                   mapOptions{{googlemaps.tagid}},
-                   displayOptions{{googlemaps.tagid}},
-                   controlStyle{{googlemaps.tagid}});
-});
+
+{# Avoid globals and wrap all in a namespace: io.aptly.grav_plugin_googlemaps #}
+var io;
+(function (io) {
+    var aptly;
+    (function (aptly) {
+        var grav_plugin_googlemaps;
+        (function (grav_plugin_googlemaps) {
+
+            var mapOptions     = {{googlemaps.mapOptions|json_encode|raw}};
+            var displayOptions = {{googlemaps.displayOptions|json_encode|raw}};
+            var controlStyle   = {{googlemaps.controlStyle|json_encode|raw}};
+
+            {# the map's type is a JS string constant: needs separate handling #}
+            mapOptions.mapTypeId = {{googlemaps.mapOptions.mapTypeId}};
+            {# initialize the map, markers and KML (if present) with Google's API#}
+            google.maps.event.addDomListener(window, "load", function() {
+                io.aptly.grav_plugin_googlemaps.initGoogleMaps("{{googlemaps.tagid}}", 
+                    mapOptions, displayOptions, controlStyle);
+            });
+
+        })(grav_plugin_googlemaps = aptly.grav_plugin_googlemaps || (aptly.grav_plugin_googlemaps = {}));
+    })(aptly = io.aptly || (io.aptly = {}));
+})(io || (io = {}));

@@ -29,7 +29,7 @@ use RocketTheme\Toolbox\Event\Event;
 class GooglemapsPlugin extends Plugin
 {
     /// marker options
-    private static $MARKER_FIELD_NAMES = [
+    private static $markerFieldNames = [
         'location', // the marker's location
         'title',    // the marker's title appearing when hovering over
         'zIndex',   // the marker's order among other markers
@@ -40,7 +40,7 @@ class GooglemapsPlugin extends Plugin
     ];
 
     /// additional options to override Google's default google map object appearance and behaviour
-    private static $OPTIONAL_MAP_OPTIONS = [
+    private static $optionalMapOptions = [
         'backgroundColor',              // a background colour, pretty when zooming out
         'disableDefaultUI',             // false disables the default UI controls
         'disableDoubleClickZoom',       // false disables zoom/center on double click
@@ -96,8 +96,8 @@ class GooglemapsPlugin extends Plugin
     {
         $this->grav['twig']->twig_paths[] = __DIR__ . '/templates';
     }
-    
-    
+
+
     /// Get googlemaps' asset from the cache for this page
     public function onPageInitialized()
     {
@@ -108,20 +108,22 @@ class GooglemapsPlugin extends Plugin
             $this->config->set('plugins.googlemaps', array_merge($defaults, $page->header()->googlemaps));
         }
 
+        // subscribe to additional events
+        $this->enable([
+            'onPageContentProcessed' => ['onPageContentProcessed', 0],
+            'onOutputGenerated'      => ['onOutputGenerated',      0]
+        ]);
+            
         // if the plugin is active on this page
         if ($this->config->get('plugins.googlemaps.enabled', false)) {
-            // subscribe to additional events
-            $this->enable([
-                'onPageContentProcessed' => ['onPageContentProcessed', 0],
-                'onOutputGenerated'      => ['onOutputGenerated',      0]
-            ]);
-
             // get this page's cached assets (if any)
             $cache = $this->grav['cache'];
             $this->assetId = md5('googlemaps' . $page->path() . $cache->getKey());
             $this->assetData = $cache->fetch($this->assetId);
-            
+
             // set this page's assets from the cache (if any)
+            // note: if enabled flag for the page itself is false then this introduces
+            // unnecessary assets (because cache cannot be deleted ...
             $this->setAssetsFromData();
             $this->assetData = null; // avoid saving again in onOutputGenerated()
         }
@@ -207,7 +209,7 @@ class GooglemapsPlugin extends Plugin
     private function createMarker($configMarker)
     {
         $marker = [];
-        foreach (GooglemapsPlugin::$MARKER_FIELD_NAMES as $field) {
+        foreach (GooglemapsPlugin::$markerFieldNames as $field) {
             if (isset($configMarker[$field])) {
                 $marker[$field] = $configMarker[$field];
             }
@@ -244,7 +246,7 @@ class GooglemapsPlugin extends Plugin
         ];
 
         // only take those options if specified in the header configuration
-        foreach (GooglemapsPlugin::$OPTIONAL_MAP_OPTIONS as $field) {
+        foreach (GooglemapsPlugin::$optionalMapOptions as $field) {
             $idx = $tagid . "." . $field;
             if (isset($config[$idx])) {
                 $mapOptions[$field] = $config[$idx];
@@ -254,13 +256,13 @@ class GooglemapsPlugin extends Plugin
         return $mapOptions;
     }
 
-    
+
     /// Setup the twig variables to initialize a specific googlemap HTML object
     private function createGooglemapVars($tagid, $config)
     {
         // main options for creating a google map object
         $mapOptions = $this->createMapOptions($tagid, $config);
-        
+
         // options for populating the map with KML, markers, info windows etc.
         $displayOptions = [
             'kmlStatus' => $config->value($tagid . ".kmlStatus", "false")
@@ -278,19 +280,44 @@ class GooglemapsPlugin extends Plugin
             'displayOptions' => $displayOptions,
             'controlStyle'   => $config->value($tagid . ".controlStyle", "")
         ];
- 
+
         return $vars;
     }
 
 
     /// Replace all found markers with HTML and JS
-    private function replaceMarkers($regex, $content, $markers)
+    private function replaceMarkers($config, $regex, $matches, $content)
+    {
+        $twig = $this->grav['twig'];
+        $replacements = [];
+        foreach ($matches as $match) {
+            $tagid = strtolower($match['tagid'][0]);
+            $vars = $this->createGooglemapVars($tagid, $config);
+
+            $googlemapsCall = $twig->processTemplate('partials/googlemapsCall' . TEMPLATE_EXT, $vars);
+            $this->addAssetData($googlemapsCall, 'inlinejs', 1, 'bottom');
+
+            $googlemapsVars = $twig->processTemplate('partials/googlemaps' . TEMPLATE_EXT, $vars);
+            $replacements[] = $googlemapsVars; // Save rendered Googlemap for later replacement
+        }
+        return \preg_replace_callback(
+            $regex,
+            function ($matches) use ($replacements) {
+                static $idx = 0;
+                return $replacements[$idx++];
+            },
+            $content
+        );
+    }
+
+    
+    /// Simply discard all found markers
+    private function discardMarkers($regex, $matches, $content)
     {
         return \preg_replace_callback(
             $regex,
-            function ($matches) use ($markers) {
-                static $idx = 0;
-                return $markers[$idx++];
+            function ($matches) {
+                return "";
             },
             $content
         );
@@ -309,26 +336,19 @@ class GooglemapsPlugin extends Plugin
         // - some identification (called tagid in documentation and source)
         // - possible white space
         // - </p> if there was the opening <p>
-        static $REGEX = '~(<p>)?\s*\[(GOOGLEMAPS)\:(?P<tagid>[^\:\]]*)\]\s*(?(1)</p>)~i';
+        static $regex = '~(<p>)?\s*\[(GOOGLEMAPS)\:(?P<tagid>[^\:\]]*)\]\s*(?(1)</p>)~i';
 
         $matches = false;
-        if (\preg_match_all($REGEX, $content, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
-            // Found markers to replace; add necessary css and javascript to the document
-            $this->addAssets($config);
-
-            $twig = $this->grav['twig'];
-            $replacements = [];
-            foreach ($matches as $match) {
-                $tagid = strtolower($match['tagid'][0]);
-                $vars = $this->createGooglemapVars($tagid, $config);
-
-                $googlemapsCall = $twig->processTemplate('partials/googlemapsCall' . TEMPLATE_EXT, $vars);
-                $this->addAssetData($googlemapsCall, 'inlinejs', 1, 'bottom');
-
-                $googlemapsVars = $twig->processTemplate('partials/googlemaps' . TEMPLATE_EXT, $vars);
-                $replacements[] = $googlemapsVars; // Save rendered Googlemap for later replacement
+        if (\preg_match_all($regex, $content, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
+            if ($config->get('enabled', true)) {
+                // Found markers to replace; add necessary css and javascript to the document
+                $this->addAssets($config);
+                // Replace individual markers with html
+                $content = $this->replaceMarkers($config, $regex, $matches, $content);
+            } else {
+                $this->assetData = [];     // Discard individual markers
+                $content = $this->discardMarkers($regex, $matches, $content);
             }
-            $content = $this->replaceMarkers($REGEX, $content, $replacements);
         }
 
         return $content;

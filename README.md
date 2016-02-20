@@ -24,7 +24,7 @@ See this screen dump how this might look:
 
 ## Issues
 
-Please open a new [issue][issues]
+Please open a new [issue or request][issues].
 
 ### Known issues
 
@@ -43,7 +43,7 @@ googlemaps:
 .googlemaps_container {
   position: relative;
   width: 100%;
-  padding-bottom: 50%;    
+  padding-bottom: 50%;
 }
 .googlemaps {
   position: absolute;
@@ -52,6 +52,11 @@ googlemaps:
 }
 </style>
 ```
+
+- There's a minor deficiency regarding asset caching 
+because Grav misses the ability to delete a specific cache item
+(See [here](https://github.com/getgrav/grav/issues/693) about this).
+
 
 ## Installation and Updates
 
@@ -98,7 +103,7 @@ instantiate the googlemaps object inside the foreseen `<div>` with matching conf
 ### Configuration Defaults
 
 ```yaml
-# Global plugin configurations
+# Global plugin or common per page configurations
 
 enabled: true                # Set to activate this plugin
 built_in_css: true           # Use the plugin's asset `googlemaps.css`
@@ -109,8 +114,11 @@ then the best process is to copy a modified version of the
 [googlemaps.yaml](googlemaps.yaml) file into your `users/config/plugins/` folder.
 This overrides the default settings.
 
+When setting enabled to false for a specific page, 
+this plugin removes avoid that any of its markers get into the HTML output.
 
-### Page settings
+
+### Specific per page and map settings
 
 Let's use the earlier [screen dump](#screendump ) to describe the configuration
 
@@ -203,8 +211,6 @@ googlemaps:
 Copyright 2015, 2016 Francis Meyvis.
 
 [Licensed](LICENSE) for use under the terms of the [MIT license][mit-license].
-
-
 
 
 
