@@ -13,7 +13,7 @@
  * Licensed under MIT, see LICENSE.
  *
  * @package     Googlemaps
- * @version     0.3.0
+ * @version     0.3.1
  * @link        <https://github.com/aptly-io/grav-plugin-googlemaps>
  * @author      Francis Meyvis <https://aptly.io/contact>
  * @copyright   2015, 2016 Francis Meyvis
@@ -195,7 +195,8 @@ class GooglemapsPlugin extends Plugin
         }
 
         // need Google's library from the following URL
-        $googleMapLibUri = 'https://maps.googleapis.com/maps/api/js?v=3';
+        $googleMapLibUri = 'https://maps.googleapis.com/maps/api/js?v=3&language=' .
+                $this->grav['language']->getActive();
         $apiKey = $config->get('apiKey', false);
         if (!is_bool($apiKey)) {
             $googleMapLibUri .= '&key=' . $apiKey;    // appends a Google's provided key if any
