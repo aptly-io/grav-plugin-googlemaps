@@ -13,7 +13,7 @@
  * Licensed under MIT, see LICENSE.
  *
  * @package     Googlemaps
- * @version     0.3.1
+ * @version     0.3.2
  * @link        <https://github.com/aptly-io/grav-plugin-googlemaps>
  * @author      Francis Meyvis <https://aptly.io/contact>
  * @copyright   2015, 2016 Francis Meyvis
@@ -151,7 +151,11 @@ class GooglemapsPlugin extends Plugin
     {
         if (isset($this->assetData)) {
             $cache = $this->grav['cache'];
-            $cache->save($this->assetId, $this->assetData);
+            if (0 < count($this->assetData) || !method_exists($cache, "delete")) {
+                $cache->save($this->assetId, $this->assetData);
+            } else {
+                $cache->delete($this->assetId);
+            }
         }
     }
 
@@ -347,6 +351,7 @@ class GooglemapsPlugin extends Plugin
                 // Replace individual markers with html
                 $content = $this->replaceMarkers($config, $regex, $matches, $content);
             } else {
+                // note this causes havoc if another modular contains a googlemap
                 $this->assetData = [];     // Discard individual markers
                 $content = $this->discardMarkers($regex, $matches, $content);
             }
