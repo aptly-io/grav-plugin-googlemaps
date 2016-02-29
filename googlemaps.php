@@ -206,7 +206,7 @@ class GooglemapsPlugin extends Plugin
             $googleMapLibUri .= '&key=' . $apiKey;    // appends a Google's provided key if any
         }
         $this->addAssetData($googleMapLibUri, 'js', 3, 'bottom');
-        $this->addAssetData('plugin://googlemaps/assets/js/googlemaps.js', 'js', 2, 'bottom');
+        $this->addAssetData('plugin://googlemaps/assets/js/googlemaps.min.js', 'js', 2, 'bottom');
     }
 
 

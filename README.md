@@ -226,6 +226,10 @@ The free code editor [Visual Studio Code](https://code.visualstudio.com/) was us
 This TypeScript file was compiled into Ecmascript 5.0 as `googlemaps.js`
 with the [`tsc`](http://www.typescriptlang.org/) compiler.
 
+```bash
+npm install # will install gulp and its dependencies defined in `package.json`
+gulp        # runs the default task in gulpfile.js: now only minifying the js source
+```
 
 ## License
 

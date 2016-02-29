@@ -1,0 +1,24 @@
+{
+  "name": "googlemaps",
+  "version": "0.3.2",
+  "description": "This Grav plugin generates HTML Google map object(s) based on specific markers in the markdown document",
+  "main": "googlemaps.php",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/aptly-io/grav-plugin-googlemaps.git"
+  },
+  "author": "MEYVIS, Francis",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/aptly-io/grav-plugin-googlemaps/issues"
+  },
+  "homepage": "https://github.com/aptly-io/grav-plugin-googlemaps#readme",
+  "devDependencies": {
+      "gulp": "^3.9.1",
+      "gulp-uglify": "^1.5.3",
+      "gulp-rename": "^1.2.2"
+  }
+}

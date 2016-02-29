@@ -3,6 +3,7 @@
 
 1. [](#improved)
   * Use cache->delete() when available in grav (version > 1.0.10)
+  * Minify support through gulp
 
 
 # v0.3.1
