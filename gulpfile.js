@@ -1,4 +1,4 @@
-/* Copyright 2026 Francis Meyvis */
+/* Copyright 2016 Francis Meyvis */
 
 // npm install ; gulp
 
@@ -10,7 +10,6 @@ var gulp   = require('gulp'),
 gulp.task('minify', function() {
     return gulp.src('assets/js/googlemaps.js')
         .pipe(uglify({
-            "mangle": false,
             "preserveComments": "license"
         }))
         .pipe(rename({
