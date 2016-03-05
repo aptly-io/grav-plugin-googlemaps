@@ -1,8 +1,10 @@
-# v0.3.3
+# v0.3.4
 ## 05/03/2016
 
 1. [](#improved)
   * Use a normal or minified `googlemaps.js` depending on the `debugger.enabled` yaml flag 
+  * Add language URL parameter only if language is known
+  * Document the `assets.js('bottom')` issue on not uptodate themes
 
 
 # v0.3.2
