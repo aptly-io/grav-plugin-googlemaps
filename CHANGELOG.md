@@ -1,3 +1,10 @@
+# v0.3.3
+## 05/03/2016
+
+1. [](#improved)
+  * Use a normal or minified `googlemaps.js` depending on the `debugger.enabled` yaml flag 
+
+
 # v0.3.2
 ## 28/02/2016
 

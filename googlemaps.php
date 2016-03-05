@@ -13,7 +13,7 @@
  * Licensed under MIT, see LICENSE.
  *
  * @package     Googlemaps
- * @version     0.3.2
+ * @version     0.3.3
  * @link        <https://github.com/aptly-io/grav-plugin-googlemaps>
  * @author      Francis Meyvis <https://aptly.io/contact>
  * @copyright   2015, 2016 Francis Meyvis
@@ -206,7 +206,11 @@ class GooglemapsPlugin extends Plugin
             $googleMapLibUri .= '&key=' . $apiKey;    // appends a Google's provided key if any
         }
         $this->addAssetData($googleMapLibUri, 'js', 3, 'bottom');
-        $this->addAssetData('plugin://googlemaps/assets/js/googlemaps.min.js', 'js', 2, 'bottom');
+        // Use normal or minified glue depending on debugging being active
+        $googleMapGlueUri = ($this->config->get('system.debugger.enabled', false))
+                ? 'plugin://googlemaps/assets/js/googlemaps.js'
+                : $googleMapGlueUri = 'plugin://googlemaps/assets/js/googlemaps.min.js';
+        $this->addAssetData($googleMapGlueUri, 'js', 2, 'bottom');
     }
 
 

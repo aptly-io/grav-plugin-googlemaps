@@ -1,5 +1,5 @@
 /* Copyright 2015, 2016 Francis Meyvis */
-/** Client part of the Grav googlemaps plugin*/
+/* v0.3.3 Glue for the Grav googlemaps plugin and Google Map's API*/
 /// <reference path="typings/googlemaps/google.maps.d.ts" />
 var io;
 (function (io) {
