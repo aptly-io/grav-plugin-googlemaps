@@ -28,17 +28,34 @@ Please open a new issue or request [here][issues].
 
 ### Known issues
 
+- The map does not show up while you're sure all is configured correctly
+(e.g. the same set-up worked for the old googlemaps plug-in version)? 
+Some themes' templates are not completely up-to-date with the latest grav-core.
+These typically miss the following twig source:
+
+    ```twig
+    {% block bottom %}
+        {{ assets.js('bottom') }}
+    {% endblock %}
+```
+
+Please kindly ask the theme's original author to add `assets.js('bottom')` 
+by referring to this plug-in and Grav's reference theme `antimatter`; 
+more [specifically here](https://github.com/getgrav/grav-theme-antimatter/blob/develop/templates/partials/base.html.twig#L85)
+
+
 - Grav's modular sub-pages have a limitation related to header assets for
 the modular sub-page (see [#562](https://github.com/getgrav/grav/issues/562)).
 When placing a googlemap on sub modular page, as a workaround:
-  1. Prevent loading the css asset:
+  1. Prevent loading the css asset (it will not work anyway):
 
      ```yaml
 googlemaps:
     built_in_css: false
 ```
 
-  2. Instead add the css directly into the sub modular page:
+  2. Instead add the css directly into the sub modular page with this style
+(before the actual marker):
 
      ```css
 <style type="text/css">
