@@ -199,8 +199,11 @@ class GooglemapsPlugin extends Plugin
         }
 
         // need Google's library from the following URL
-        $googleMapLibUri = 'https://maps.googleapis.com/maps/api/js?v=3&language=' .
-                $this->grav['language']->getActive();
+        $googleMapLibUri = 'https://maps.googleapis.com/maps/api/js?v=3';
+        $language = $this->grav['language']->getActive();
+        if ($language) {
+            $googleMapLibUri .= '&language=' . $language;
+        }
         $apiKey = $config->get('apiKey', false);
         if (!is_bool($apiKey)) {
             $googleMapLibUri .= '&key=' . $apiKey;    // appends a Google's provided key if any
@@ -339,13 +342,9 @@ class GooglemapsPlugin extends Plugin
         // Find all occurrences of GOOGLEMAP in content
         // ~ marks the start and end of the pattern, i is an option for caseless matching
         // The pattern to match is
-        // - optional <p>
-        // - possible white space
         // - [GOOGLEMAPS:
-        // - some identification (called tagid in documentation and source)
-        // - possible white space
-        // - </p> if there was the opening <p>
-        static $regex = '~(<p>)?\s*\[(GOOGLEMAPS)\:(?P<tagid>[^\:\]]*)\]\s*(?(1)</p>)~i';
+        // - some identification (called tagid in the documentation and source)
+        static $regex = '~\[(GOOGLEMAPS)\:(?P<tagid>[^\:\]]*)\]~i';
 
         $matches = false;
         if (\preg_match_all($regex, $content, $matches, PREG_OFFSET_CAPTURE | PREG_SET_ORDER)) {
