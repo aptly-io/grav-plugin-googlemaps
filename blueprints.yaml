@@ -1,5 +1,5 @@
 name: Googlemaps
-version: 0.3.0
+version: 0.3.5
 description: The **googlemaps** plugin provides a method to display a google map with KML overlay and markers
 icon: map-marker
 author:

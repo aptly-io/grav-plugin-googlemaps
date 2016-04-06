@@ -1,3 +1,12 @@
+# v0.3.5
+## 06/04/2016
+
+1. [](#bugfix)
+  * A user pointed out a conflict with the assets plugin
+1. [](#improved)
+  * Address the build_in_css warning in the admin pages
+
+
 # v0.3.4
 ## 05/03/2016
 
