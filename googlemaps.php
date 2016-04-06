@@ -84,7 +84,8 @@ class GooglemapsPlugin extends Plugin
                 // if the plugin is active globally, subscribe to additional events
                 $this->enable([
                     'onTwigTemplatePaths' => ['onTwigTemplatePaths', 0],
-                    'onPageInitialized'   => ['onPageInitialized',   0]
+                    // 1 so it has a higher priority than the asset plugin
+                    'onPageInitialized'   => ['onPageInitialized',   1]
                 ]);
             }
         }
