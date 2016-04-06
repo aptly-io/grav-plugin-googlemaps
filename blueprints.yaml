@@ -25,3 +25,13 @@ form:
         0: Disabled
       validate:
         type: bool
+    built_in_css:
+      type: toggle
+      label: Use plugin's build-in css
+      highlight: 1
+      default: 1
+      options:
+        1: Enabled
+        0: Disabled
+      validate:
+        type: bool
