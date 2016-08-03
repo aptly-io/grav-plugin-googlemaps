@@ -1,3 +1,16 @@
+# v1.0.0
+## 03/08/2016
+
+1. [](#bugfix)
+  * Cache id should take language into account
+1. [](#improved)
+  * Added Dutch translation (for what that's worth)
+1. [](#improved)
+  * Update documentation
+1. [](#improved)
+  * Version 1 for grav 1 ... finally ...
+
+
 # v0.3.5
 ## 06/04/2016
 
