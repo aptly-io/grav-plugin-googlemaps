@@ -1,4 +1,5 @@
 # Global google maps plugin configuration
 
-enabled: true                # Set to false to disable this plugin completely
-built_in_css: true           # Use asset `googlemaps.css`
+enabled: true                # Set to false to disable this plugin
+built_in_css: true           # Use the build-in asset `googlemaps.css`
+apiKey: Fkldf89eS_jkKyHuq_fklEfdfFqO73KlK1i7vz4   # a dummy value! Get yours @ google developer console
