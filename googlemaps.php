@@ -201,7 +201,7 @@ class GooglemapsPlugin extends Plugin
 
         // need Google's library from the following URL
         $googleMapLibUri = 'https://maps.googleapis.com/maps/api/js?v=3';
-        $language = $this->grav['language']->getActive();
+        $language = $this->grav['language']->getLanguage();
         if ($language) {
             $googleMapLibUri .= '&language=' . $language;
         }
