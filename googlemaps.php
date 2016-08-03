@@ -13,7 +13,7 @@
  * Licensed under MIT, see LICENSE.
  *
  * @package     Googlemaps
- * @version     0.3.5
+ * @version     1.0.0
  * @link        <https://github.com/aptly-io/grav-plugin-googlemaps>
  * @author      Francis Meyvis <https://aptly.io/contact>
  * @copyright   2015, 2016 Francis Meyvis
