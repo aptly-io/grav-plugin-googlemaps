@@ -1,5 +1,6 @@
 /* Copyright 2016 Francis Meyvis */
 
+// From a bash type of terminal run following one-liner
 // npm install ; gulp
 
 var gulp   = require('gulp'),

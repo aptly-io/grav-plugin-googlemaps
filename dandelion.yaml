@@ -1,7 +1,4 @@
 adapter: sftp
-host: ftp.aptly.io
-port: 21098
-username: aptlnwzz
 path: public_html/user/plugins/googlemaps
 exclude:
   - assets/screendump.png
