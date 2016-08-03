@@ -13,25 +13,35 @@ bugs: https://github.com/aptly-io/grav-plugin-googlemaps/issues
 license: MIT
 
 form:
-  validation: strict
+  validation: loose
   fields:
     enabled:
       type: toggle
-      label: Plugin activation
+      label: PLUGIN_GOOGLEMAPS.PLUGIN_ACTIVATION
       highlight: 1
       default: 1
       options:
-        1: Enabled
-        0: Disabled
+        1: PLUGIN_GOOGLEMAPS.ENABLED
+        0: PLUGIN_GOOGLEMAPS.DISABLED
       validate:
         type: bool
+      help: PLUGIN_GOOGLEMAPS.ACTIVATION_HELP
+
     built_in_css:
       type: toggle
-      label: Use plugin's build-in css
+      label: PLUGIN_GOOGLEMAPS.BUILTIN_CSS
       highlight: 1
       default: 1
       options:
-        1: Enabled
-        0: Disabled
+        1: PLUGIN_GOOGLEMAPS.ENABLED
+        0: PLUGIN_GOOGLEMAPS.DISABLED
       validate:
         type: bool
+      help: PLUGIN_GOOGLEMAPS.BUILTIN_CSS_HELP
+    apiKey:
+      type: text
+      label: PLUGIN_GOOGLEMAPS.API_KEY
+      size: medium
+      placeholder: Google API key
+      default: THIS_DUMMY_KEY_WONT_WORK
+      help: PLUGIN_GOOGLEMAPS.API_KEY_HELP

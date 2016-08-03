@@ -1,0 +1,23 @@
+en:
+    PLUGIN_GOOGLEMAPS:
+        ENABLED: "Enabled"
+        DISABLED: "Disabled"
+        PLUGIN_ACTIVATION: "Plugin's status"
+        ACTIVATION_HELP: Activates or deactivates the plugin. Note that even if deactivated, this plugin removes all markers from the resulting HTML.
+        BUILTIN_CSS: Use plugin's built-in CSS
+        BUILTIN_CSS_HELP: If enabled, the plugin uses its built-in stylesheet for the resulting HTML. Disable this when providing your alternative stylesheet.
+        API_KEY: "Google API key"
+        API_KEY_HELP: Google requires the use of a Google maps API key. Enter here the one obtained through "Google's developer console".
+
+nl:
+    PLUGIN_GOOGLEMAPS:
+        ENABLED: "Ingeschakeld"
+        DISABLED: "Uitgeschakeld"
+        PLUGIN_ACTIVATION: "Status van de plugin"
+        ACTIVATION_HELP: Schakelt de plugin in of uit. De plugin verwijdert de googlemaps marker zelfs wanneer hij is uitgeschakeld.
+        BUILTIN_CSS: Gebruik de ingebouwde stylesheets.
+        BUILTIN_CSS_HELP: Eens geactiveerd gebruikt de plugin zijn ingebouwde stylesheet. In het andere geval een alternatieve stylesheet.
+        API_KEY: "Google's API sleutel"
+        API_KEY_HELP: Google verplicht het gebruik van hun Google API sleutels. Vul hier de sleutel in, bekomen via "Google's developer console".
+
+
