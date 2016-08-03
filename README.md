@@ -252,17 +252,26 @@ Each Google map object has these additional properties (not illustrated in earli
 
 A few notes on hacking the Google maps plugin.
 
-The free IDE [Netbeans](https://netbeans.org/) is used for editing and debugging Grav and the `googlemaps.php` plugin code.
-The free code editor [Visual Studio Code (VS Code)](https://code.visualstudio.com/) was used for editing `googlemaps.ts`.
+The free IDE [Netbeans](https://netbeans.org/) is used for
+editing and debugging Grav and the `googlemaps.php` plugin code.
+The free code editor [Visual Studio Code (VS Code)](https://code.visualstudio.com/)
+was used for editing `googlemaps.ts`.
 The TypeScript file was compiled into Ecmascript 5.0 as `googlemaps.js`
 with the [`tsc`](http://www.typescriptlang.org/) compiler through VS Code.
 
+These commands install the necessary tools and then transpile and minify
+the `googlemaps.ts` into its `googlemaps.min.js (in case you'd like to modify):
+
 ```bash
+cd user/plugins/googlemaps
 npm install # will install gulp and its dependencies defined in included `package.json`
+export PATH=node_modules/.bin:$PATH     # include these biuld tools in the PATH
 gulp        # runs the default task in gulpfile.js: minifying the js source
 ```
 
-Use `system.debugger.enabled` to toggle back to the normal (not minified) `googlemaps.js` to debug in the browser.
+Use `system.debugger.enabled` to toggle back to the normal (not minified)
+`googlemaps.js` to debug in the browser.
+
 
 ## License
 
