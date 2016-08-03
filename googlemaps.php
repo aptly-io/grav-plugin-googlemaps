@@ -119,7 +119,7 @@ class GooglemapsPlugin extends Plugin
         if ($this->config->get('plugins.googlemaps.enabled', false)) {
             // get this page's cached assets (if any)
             $cache = $this->grav['cache'];
-            $this->assetId = md5('googlemaps' . $page->path() . $cache->getKey());
+            $this->assetId = md5('googlemaps' . $page->path() . $this->grav['language']->getLanguage() . $cache->getKey());
             $this->assetData = $cache->fetch($this->assetId);
 
             // set this page's assets from the cache (if any)
